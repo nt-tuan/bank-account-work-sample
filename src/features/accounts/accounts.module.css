@@ -1,0 +1,59 @@
+/* Label/amount pairs: every second child is an amount, whatever element <Money> renders. */
+.totals {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 16px;
+  border-top: 1px solid var(--color-row-divider);
+  padding-top: 14px;
+  font-size: var(--text-md);
+}
+.totals > :nth-child(even) {
+  text-align: right;
+}
+
+/* Home account row: four columns on desktop; on phones status moves under the name and the amount spans both lines. */
+.accountRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) 20px;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 20px;
+  min-height: 72px;
+  color: var(--color-ink);
+}
+.accountRow:hover {
+  background: var(--color-row-hover);
+  color: var(--color-ink);
+  text-decoration: none;
+}
+.accountName,
+.accountStatus {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.accountAmount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+@media (width < 810px) {
+  .accountRow {
+    grid-template-columns: minmax(0, 1fr) auto 16px;
+    padding: 12px 16px;
+    gap: 10px;
+  }
+  .accountStatus {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .accountAmount {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .accountRow > svg {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+  }
+}

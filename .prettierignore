@@ -1,0 +1,6 @@
+# .gitignore also excludes dependencies, builds, databases and test reports.
+coverage/
+package-lock.json
+
+# Exported design-tool artifacts.
+docs/ui-design/canvas/

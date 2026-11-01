@@ -1,0 +1,59 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.icon {
+  display: flex;
+  flex: none;
+  color: var(--color-muted);
+}
+.content {
+  z-index: 60;
+  width: var(--radix-select-trigger-width);
+  max-width: calc(100vw - 24px);
+  max-height: min(320px, var(--radix-select-content-available-height));
+  overflow: hidden;
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-dialog);
+}
+.viewport {
+  padding: 4px;
+}
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 36px 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-md);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  outline: none;
+}
+.option[data-highlighted] {
+  background: var(--color-action-tint);
+  color: var(--color-action);
+}
+.option[data-disabled] {
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+.indicator {
+  position: absolute;
+  right: 12px;
+  display: flex;
+  color: var(--color-action);
+}

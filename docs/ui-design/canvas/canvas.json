@@ -1,0 +1,189 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-11-01T09:00:00Z"
+  },
+  "title": "Demo Banking UI Design",
+  "launch": {
+    "view": "canvas"
+  },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 2300,
+      "title": "00 Foundations \u2014 logo, tokens & components",
+      "expand": "fill"
+    },
+    "Login.dc.html": {
+      "x": 0,
+      "y": 2660,
+      "w": 1440,
+      "h": 900,
+      "title": "01 Login /login",
+      "expand": "fill"
+    },
+    "Home.dc.html": {
+      "x": 1520,
+      "y": 2660,
+      "w": 1440,
+      "h": 1180,
+      "title": "02 Home /",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "AccountDetail.dc.html": {
+      "x": 3040,
+      "y": 2660,
+      "w": 1440,
+      "h": 1180,
+      "title": "03 Account detail /accounts/:id",
+      "expand": "fill"
+    },
+    "Activity.dc.html": {
+      "x": 0,
+      "y": 4200,
+      "w": 1440,
+      "h": 1400,
+      "title": "04 Account activity /activity",
+      "expand": "fill"
+    },
+    "Insights.dc.html": {
+      "x": 3040,
+      "y": 4200,
+      "w": 1440,
+      "h": 1200,
+      "title": "06 Insights /insights",
+      "expand": "fill"
+    },
+    "TransferRecipient.dc.html": {
+      "x": 0,
+      "y": 5960,
+      "w": 1440,
+      "h": 1560,
+      "title": "07 New transfer \u2014 recipient step + lookup states",
+      "expand": "fill"
+    },
+    "TransferReview.dc.html": {
+      "x": 1520,
+      "y": 5960,
+      "w": 1440,
+      "h": 1200,
+      "title": "08 New transfer \u2014 review & confirm",
+      "expand": "fill"
+    },
+    "ActivityDetail.dc.html": {
+      "x": 3040,
+      "y": 5960,
+      "w": 1440,
+      "h": 2300,
+      "title": "09 Activity Details \u2014 summary + transfer status states",
+      "expand": "fill"
+    },
+    "MobileHome.dc.html": {
+      "x": 0,
+      "y": 7880,
+      "w": 390,
+      "h": 844,
+      "title": "10 Mobile Home",
+      "is_interactive": true
+    },
+    "MobileActivity.dc.html": {
+      "x": 470,
+      "y": 7880,
+      "w": 390,
+      "h": 844,
+      "title": "11 Mobile Activity"
+    },
+    "MobileMenu.dc.html": {
+      "x": 940,
+      "y": 7880,
+      "w": 390,
+      "h": 844,
+      "title": "12 Mobile Menu"
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Login.dc.html",
+    "Home.dc.html",
+    "AccountDetail.dc.html",
+    "Activity.dc.html",
+    "Insights.dc.html",
+    "TransferRecipient.dc.html",
+    "TransferReview.dc.html",
+    "ActivityDetail.dc.html",
+    "MobileHome.dc.html",
+    "MobileActivity.dc.html",
+    "MobileMenu.dc.html"
+  ],
+  "notes": {
+    "t0": {
+      "x": 0,
+      "y": -300,
+      "text": "Demo Banking \u2014 UI design spec",
+      "kind": "title1",
+      "maxW": 1440
+    },
+    "t1": {
+      "x": 0,
+      "y": 2360,
+      "text": "Accounts",
+      "kind": "title1",
+      "maxW": 4480
+    },
+    "t2": {
+      "x": 0,
+      "y": 3900,
+      "text": "Activity & insights",
+      "kind": "title1",
+      "maxW": 4480
+    },
+    "t3": {
+      "x": 0,
+      "y": 5660,
+      "text": "Transfers",
+      "kind": "title1",
+      "maxW": 4480
+    },
+    "t4": {
+      "x": 0,
+      "y": 7580,
+      "text": "Mobile shell (< 810 px)",
+      "kind": "title1",
+      "maxW": 1330
+    },
+    "n1": {
+      "x": 1520,
+      "y": 0,
+      "w": 420,
+      "text": "Source of truth for behavior: docs/spec.md + docs/technical-design/. This canvas fixes layout, hierarchy, copy and states. Tokens on the Foundations board map 1:1 to src/styles/tokens.css.",
+      "fill": "blue"
+    },
+    "n2": {
+      "x": 1520,
+      "y": 600,
+      "w": 420,
+      "text": "Hidden amounts: per technical-design \u00a76.5, only Home masks money; eye toggle lives in the Home balance block.",
+      "fill": "orange"
+    },
+    "n3": {
+      "x": 1520,
+      "y": 1100,
+      "w": 420,
+      "text": "Rev 2 (user feedback): Noto Sans thin type; no alert boxes or red/yellow/green fills \u2014 status is icon + colored text; buttons only in the end-of-page action bar, inline actions are text links; own-account lookup result follows the normal found flow; new D-arrow logo mark.",
+      "fill": "teal"
+    },
+    "n4": {
+      "x": 1520,
+      "y": 4200,
+      "w": 420,
+      "text": "Account activity replaces the separate Transfer history page. Filter owned transfers by Processing / Completed / Failed, refresh visible Processing rows every 5 s, and open Activity Details with Activity Summary plus inline Transfer Details. Ledger status remains separate.",
+      "fill": "blue"
+    }
+  },
+  "designSystems": []
+}

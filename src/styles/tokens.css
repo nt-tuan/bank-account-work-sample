@@ -1,0 +1,88 @@
+/*
+ * Semantic tokens from the UI design canvas (Foundations board), declared as the Tailwind theme.
+ * Each one becomes a CSS variable on :root and a utility: --color-canvas → bg-canvas, var(--color-canvas).
+ * Components consume only these. Tailwind's default palette, type scale and breakpoints are cleared on purpose.
+ */
+@theme {
+  --color-*: initial;
+  --color-canvas: #f4f5f7;
+  --color-surface: #ffffff;
+  --color-white: #ffffff;
+  --color-chrome: #2b2f33;
+  --color-chrome-hover: #383d42;
+  --color-on-chrome: #ffffff;
+  --color-on-chrome-muted: #c9ced3;
+  --color-on-chrome-soft: #e3e6e9;
+  --color-tab: #4f555b;
+  --color-tab-hover: #5c636a;
+  /* Board names: text, text-muted (renamed so utilities read text-ink, text-muted). */
+  --color-ink: #2b2f33;
+  --color-muted: #5f6770;
+  --color-divider: #dadde1;
+  --color-row-divider: #e6e8eb;
+  --color-row-hover: #fafbfc;
+  --color-table-head: #c8cdd3;
+  --color-input-border: #8c949c;
+  --color-subtle: #eef0f2;
+  --color-action: #0066c0;
+  --color-action-hover: #0052a3;
+  --color-action-tint: #f0f6fd;
+  --color-confirm: #c2410c;
+  --color-confirm-hover: #9a3412;
+  --color-disabled: #dadde1; /* board: disabled-bg */
+  --color-ok: #1e7b34;
+  --color-warn: #8a5a00;
+  --color-bad: #c0362c;
+  --color-chart-income: #2f7bd0;
+  --color-chart-spending: #d97a2b;
+  --color-chart-track: #f1f2f4;
+
+  --font-*: initial;
+  --font-sans: 'Noto Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Sizes only: line height is inherited from the body (1.6) unless a utility sets it. */
+  --text-*: initial;
+  --text-2xs: 11px;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-base: 15px;
+  --text-lg: 16px;
+  --text-xl: 18px;
+  --text-2xl: 20px;
+  --text-3xl: 22px;
+  --text-4xl: 28px;
+  --text-5xl: 34px;
+
+  /* 4 px grid in px (not rem), so p-4 = 16px, gap-5 = 20px. */
+  --spacing: 4px;
+  --spacing-touch: 44px;
+  --spacing-topbar: 56px;
+  --spacing-sidebar: 240px;
+  --spacing-pagebar: 64px;
+
+  --container-*: initial;
+  --container-page: 1264px;
+  --container-narrow: 924px;
+
+  --radius-*: initial;
+  --radius-xs: 2px;
+  --radius-md: 4px;
+
+  /* max-md = phone layout (< 810px); max-lg and max-xl collapse multi-column desktop layouts. */
+  --breakpoint-*: initial;
+  --breakpoint-md: 810px;
+  --breakpoint-lg: 1101px;
+  --breakpoint-xl: 1200px;
+
+  --shadow-*: initial;
+  --shadow-dialog: 0 8px 24px rgb(43 47 51 / 0.2);
+
+  --animate-skeleton: skeleton 1.4s ease-in-out infinite;
+  @keyframes skeleton {
+    50% {
+      opacity: 0.55;
+    }
+  }
+}

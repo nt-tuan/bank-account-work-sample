@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mobile Menu</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&amp;display=swap">
+<style>
+body{margin:0;font-family:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color:#2B2F33;font-weight:400}
+*{box-sizing:border-box}
+a{color:#0066C0;text-decoration:none}
+p{margin:0}
+.muted{color:#5F6770}.sm{font-size:13px}.xs{font-size:12px}
+.grp{font-size:13px;color:#5F6770;padding:16px 16px 6px}
+.list{list-style:none;margin:0 12px;padding:0;background:#fff;border-radius:4px;overflow:hidden}
+.list a,.list button{display:flex;align-items:center;gap:12px;min-height:52px;padding:0 16px;color:#2B2F33;font:inherit;font-size:15px;width:100%;background:transparent;border:0;border-bottom:1px solid #E6E8EB;text-align:left;cursor:pointer}
+.list li:last-child a,.list li:last-child button{border-bottom:0}
+.chev{margin-left:auto}
+.bn{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #DADDE1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding-bottom:20px}
+.bn a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;color:#5F6770;font-size:11px}
+.bn a[aria-current="page"]{color:#0066C0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #F4F5F7">
+  <header style="height: 52px; background: #2B2F33; color: #fff; display: flex; align-items: center; padding: 0 16px">
+    <span style="display: flex; align-items: center; gap: 8px" role="img" aria-label="Demo Banking">
+      <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5h8.5a11 11 0 0 1 0 22H7z"></path><path d="M12 16h9"></path><path d="M17.5 12l4 4-4 4"></path></svg>
+      <span style="font-size: 15px; letter-spacing: 0.04em" aria-hidden="true"><span style="font-weight: 600">DEMO</span> <span style="font-weight: 300">BANKING</span></span>
+    </span>
+  </header>
+  <div style="background: #fff; border-bottom: 1px solid #DADDE1; min-height: 52px; display: flex; align-items: center; justify-content: center"><h1 style="font-size: 16px; font-weight: 500; margin: 0">Menu</h1></div>
+  <p class="sm muted" style="padding: 12px 16px 0">Signed in as Kenji Watanabe</p>
+  <div class="grp">Accounts</div>
+  <ul class="list">
+    <li><a href="AccountDetail.dc.html">Account information<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C949C" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></a></li>
+    <li><a href="MobileActivity.dc.html">Account activity<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C949C" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></a></li>
+    <li><a href="Insights.dc.html">Insights<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C949C" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></a></li>
+  </ul>
+  <div class="grp">Demo</div>
+  <ul class="list">
+    <li><button type="button">Demo controls<span class="xs muted">DEMO ONLY</span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C949C" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button></li>
+  </ul>
+  <div style="height: 20px"></div>
+  <ul class="list">
+    <li><button type="button" style="justify-content: center; color: #0066C0">Log out</button></li>
+  </ul>
+  <p class="xs muted" style="padding: 16px">Demo Banking is an independent personal banking worksample.</p>
+  <nav class="bn" aria-label="Main">
+    <a href="MobileHome.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Home</a>
+    <a href="MobileActivity.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"></path><path d="M14 3v5h5M9 13h6M9 17h6"></path></svg>Activity</a>
+    <a href="TransferRecipient.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>Transfer</a>
+    <a href="MobileMenu.dc.html" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="6" cy="6" r="1.5"></circle><circle cx="12" cy="6" r="1.5"></circle><circle cx="18" cy="6" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle><circle cx="6" cy="18" r="1.5"></circle><circle cx="12" cy="18" r="1.5"></circle><circle cx="18" cy="18" r="1.5"></circle></svg>Menu</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

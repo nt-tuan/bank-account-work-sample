@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mobile Home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&amp;display=swap">
+<style>
+body{margin:0;font-family:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color:#2B2F33;font-weight:400}
+*{box-sizing:border-box}
+a{color:#0066C0;text-decoration:none}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:#5F6770}.sm{font-size:13px}.xs{font-size:12px}
+.lk{display:inline-flex;align-items:center;gap:4px;font-size:13px;background:none;border:0;padding:0;font-family:inherit;color:#0066C0;cursor:pointer;min-height:32px}
+.row{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #E6E8EB;color:#2B2F33;min-height:64px}
+.bn{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #DADDE1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding-bottom:20px}
+.bn a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;color:#5F6770;font-size:11px}
+.bn a[aria-current="page"]{color:#0066C0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #F4F5F7">
+  <header style="height: 52px; background: #2B2F33; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 16px">
+    <span style="display: flex; align-items: center; gap: 8px" role="img" aria-label="Demo Banking">
+      <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5h8.5a11 11 0 0 1 0 22H7z"></path><path d="M12 16h9"></path><path d="M17.5 12l4 4-4 4"></path></svg>
+      <span style="font-size: 15px; letter-spacing: 0.04em" aria-hidden="true"><span style="font-weight: 600">DEMO</span> <span style="font-weight: 300">BANKING</span></span>
+    </span>
+  </header>
+  <div style="padding: 12px; display: flex; flex-direction: column; gap: 10px">
+    <section style="background: #fff; border-radius: 4px; padding: 16px" aria-label="Balance">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+        <span style="font-size: 14px; font-weight: 500">Total available</span>
+        <span style="display: flex; align-items: center; gap: 4px">
+          <span class="num" style="font-size: 26px; font-weight: 300">{{ m.avail }}</span>
+          <sc-if value="{{ shown }}" hint-placeholder-val="{{ true }}">
+            <button class="lk" type="button" aria-pressed="false" aria-label="Hide amounts" onClick="{{ toggle }}" style="color: #5F6770; min-width: 44px; min-height: 44px; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+          </sc-if>
+          <sc-if value="{{ hidden }}" hint-placeholder-val="{{ false }}">
+            <button class="lk" type="button" aria-pressed="true" aria-label="Show amounts" onClick="{{ toggle }}" style="color: #5F6770; min-width: 44px; min-height: 44px; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.8 8.4 2 12 2 12s4 7 10 7a9.7 9.7 0 0 0 4.4-1"></path></svg></button>
+          </sc-if>
+        </span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <span class="xs muted">As of 1 Nov 18:42 JST</span>
+        <button class="lk" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"></path></svg>Refresh</button>
+      </div>
+      <div class="sm" style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; border-top: 1px solid #E6E8EB; margin-top: 8px; padding-top: 10px">
+        <span class="muted">Total current</span><span class="num" style="text-align: right">{{ m.current }}</span>
+        <span class="muted">On hold</span><span class="num" style="text-align: right">{{ m.held }}</span>
+      </div>
+      <p class="xs muted" style="margin-top: 8px">Includes <span class="num">{{ m.restricted }}</span> in 2 restricted accounts that can't be transferred.</p>
+    </section>
+    <section style="background: #fff; border-radius: 4px; overflow: hidden" aria-labelledby="acc">
+      <h2 id="acc" style="font-size: 14px; font-weight: 500; margin: 0; padding: 12px 16px; border-bottom: 1px solid #E6E8EB">Your accounts</h2>
+      <sc-for list="{{ accounts }}" as="a" hint-placeholder-count="6">
+        <a class="row" href="AccountDetail.dc.html">
+          <span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column">
+            <span style="font-size: 14px">{{ a.name }}</span>
+            <span class="xs num" style="color: {{ a.stColor }}">{{ a.sub }}</span>
+          </span>
+          <span class="num" style="font-size: 16px; font-weight: 300">{{ a.avail }}</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8C949C" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+        </a>
+      </sc-for>
+    </section>
+  </div>
+  <nav class="bn" aria-label="Main">
+    <a href="MobileHome.dc.html" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Home</a>
+    <a href="MobileActivity.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"></path><path d="M14 3v5h5M9 13h6M9 17h6"></path></svg>Activity</a>
+    <a href="TransferRecipient.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>Transfer</a>
+    <a href="MobileMenu.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="6" cy="6" r="1.5"></circle><circle cx="12" cy="6" r="1.5"></circle><circle cx="18" cy="6" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle><circle cx="6" cy="18" r="1.5"></circle><circle cx="12" cy="18" r="1.5"></circle><circle cx="18" cy="18" r="1.5"></circle></svg>Menu</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"amountsHidden":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { hidden: null }; }
+  renderVals() {
+    const hidden = this.state.hidden ?? (this.props.amountsHidden ?? false);
+    const v = (s) => hidden ? '¥ ••••••' : s;
+    const accounts = [
+      ['Everyday', 'Checking', '2481', '¥457,350', 'a'], ['Savings', 'Savings', '7302', '¥2,150,000', 'a'],
+      ['Travel fund', 'Savings', '5519', '¥186,200', 'a'], ['Side business', 'Checking', '9024', '¥0', 'a'],
+      ['Rent reserve', 'Checking', '3367', '¥320,000', 'r'], ['Old payroll', 'Savings', '6148', '¥54,910', 'r']
+    ].map(([name, type, last4, avail, s]) => ({
+      name, avail: v(avail),
+      sub: s === 'a' ? type + ' · •••' + last4 : 'Restricted · •••' + last4,
+      stColor: s === 'a' ? '#5F6770' : '#8A5A00'
+    }));
+    return {
+      shown: !hidden, hidden, toggle: () => this.setState({ hidden: !hidden }),
+      m: { avail: v('¥3,168,460'), current: v('¥3,208,940'), held: v('¥40,480'), restricted: v('¥374,910') },
+      accounts
+    };
+  }
+}
+</script>
+</body>
+</html>

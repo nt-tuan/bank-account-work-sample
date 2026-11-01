@@ -1,0 +1,121 @@
+/* Progress stepper: numbered dots, done / current states */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 28px;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  flex-wrap: wrap;
+}
+.steps li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  border: 1px solid var(--color-input-border);
+  background: var(--color-white);
+}
+.done {
+  background: var(--color-chrome);
+  border-color: var(--color-chrome);
+  color: var(--color-white);
+}
+.current {
+  background: var(--color-action);
+  border-color: var(--color-action);
+  color: var(--color-white);
+}
+.currentLabel {
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+/* Radio card: the whole row is the label; checked and disabled states come from the input inside. */
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 8px 16px;
+  border: 1px solid var(--color-table-head);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  cursor: pointer;
+}
+.option:has(input:checked) {
+  border-color: var(--color-action);
+  background: var(--color-action-tint);
+}
+.option:has(input:disabled) {
+  background: var(--color-canvas);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+.option input {
+  accent-color: var(--color-action);
+  width: 18px;
+  height: 18px;
+  flex: none;
+  margin: 0;
+}
+
+/* Review rows: key | value | Change; on phones the value drops under the key and Change spans both lines. */
+.review {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.review li {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr) 72px;
+  gap: 16px;
+  align-items: center;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  min-height: 52px;
+  overflow-wrap: anywhere;
+}
+.reviewKey {
+  font-size: var(--text-md);
+}
+.reviewChange {
+  text-align: right;
+}
+
+@media (width < 810px) {
+  .steps {
+    gap: 14px;
+  }
+  .review li {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 10px 16px;
+    gap: 2px 12px;
+  }
+  .reviewKey {
+    grid-column: 1;
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+  }
+  .review li > span:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .reviewChange {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}

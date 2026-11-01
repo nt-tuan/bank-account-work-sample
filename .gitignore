@@ -1,0 +1,10 @@
+node_modules/
+dist/
+data/
+test-results/
+playwright-report/
+*.sqlite
+*.sqlite-*
+*.lock
+.DS_Store
+.e2e-data/

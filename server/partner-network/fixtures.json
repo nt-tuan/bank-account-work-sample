@@ -1,0 +1,72 @@
+{
+  "banks": [
+    { "bank_code": "0152", "bank_name": "Minato Bank", "inquiry_available": 1 },
+    { "bank_code": "0310", "bank_name": "Sakura Partner Bank", "inquiry_available": 1 },
+    { "bank_code": "0427", "bank_name": "Kita Trust Bank", "inquiry_available": 0 }
+  ],
+  "accounts": [
+    {
+      "bank_code": "0152",
+      "account_no": "4012733",
+      "account_kind": "FUTSU",
+      "holder_name": "SUZUKI HARUTO",
+      "status_cd": "1"
+    },
+    {
+      "bank_code": "0152",
+      "account_no": "4013390",
+      "account_kind": "FUTSU",
+      "holder_name": "KOBAYASHI REN",
+      "status_cd": "1"
+    },
+    {
+      "bank_code": "0152",
+      "account_no": "4019001",
+      "account_kind": "FUTSU",
+      "holder_name": "NAKAMURA YUI",
+      "status_cd": "2"
+    },
+    {
+      "bank_code": "0152",
+      "account_no": "4019118",
+      "account_kind": "TOZA",
+      "holder_name": "ITO SORA",
+      "status_cd": "9"
+    },
+    {
+      "bank_code": "0310",
+      "account_no": "3106621",
+      "account_kind": "FUTSU",
+      "holder_name": "SATO YUKI",
+      "status_cd": "1"
+    },
+    {
+      "bank_code": "0310",
+      "account_no": "3107777",
+      "account_kind": "FUTSU",
+      "holder_name": "TAKAHASHI-MONTGOMERY ELIZABETH",
+      "status_cd": "1"
+    },
+    {
+      "bank_code": "0310",
+      "account_no": "3108040",
+      "account_kind": "TOZA",
+      "holder_name": "AOBA DESIGN (KK)",
+      "status_cd": "1"
+    },
+    {
+      "bank_code": "0427",
+      "account_no": "2700418",
+      "account_kind": "FUTSU",
+      "holder_name": "YAMADA AOI",
+      "status_cd": "1"
+    },
+    {
+      "bank_code": "0427",
+      "account_no": "2700425",
+      "account_kind": "FUTSU",
+      "holder_name": "KIMURA DAICHI",
+      "status_cd": "1"
+    }
+  ]
+}

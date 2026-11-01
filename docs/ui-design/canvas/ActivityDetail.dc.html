@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Activity Details</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F4F5F7;color:#2B2F33;font-family:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.6;font-weight:400}
+*{box-sizing:border-box}
+a{color:#0066C0;text-decoration:none}a:hover{color:#0052A3;text-decoration:underline}
+h1,h2,h3{margin:0;font-weight:500;line-height:1.35}
+h1{font-size:18px}h2{font-size:16px}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:#5F6770}.sm{font-size:13px}.xs{font-size:12px}
+.card{background:#fff;border-radius:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;min-width:200px;padding:0 24px;border-radius:4px;font:inherit;font-size:14px;font-weight:600;border:1px solid transparent;cursor:pointer;text-decoration:none}
+.btn:hover{text-decoration:none}
+.btn-primary{background:#0066C0;color:#fff}.btn-primary:hover{background:#0052A3;color:#fff}
+.btn-outline{background:#fff;color:#0066C0;border-color:#0066C0}
+.actions{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.st{display:inline-flex;align-items:center;gap:8px;font-size:15px}
+.ok{color:#1E7B34}.bad{color:#C0362C}.proc{color:#0066C0}.warn{color:#8A5A00}
+.lk{display:inline-flex;align-items:center;gap:4px;font-size:14px;background:none;border:0;padding:0;font-family:inherit;color:#0066C0;cursor:pointer}
+.top{height:56px;background:#2B2F33;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px 0 8px;gap:16px}
+.tb{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;background:transparent;border:0;color:#fff;cursor:pointer;border-radius:4px;font-family:inherit;font-size:14px}
+.wrap{display:flex;flex-wrap:wrap;align-items:stretch;min-height:1504px}
+.side{flex:1 0 240px;max-width:240px;background:#2B2F33;color:#fff;padding:8px 0 24px}
+.navgrp{font-size:13px;color:#C9CED3;padding:20px 20px 4px}
+.nav{list-style:none;margin:0;padding:0}
+.nav a{display:flex;align-items:center;gap:12px;min-height:48px;padding:0 20px 0 32px;color:#fff;font-size:15px;text-decoration:none}
+.nav a.home{padding-left:20px}
+.nav a:hover{background:#383D42;color:#fff;text-decoration:none}
+.nav a[aria-current="page"]{background:#fff;color:#2B2F33}
+.main{flex:999 1 560px;min-width:0;display:flex;flex-direction:column}
+.pagebar{background:#fff;border-bottom:1px solid #DADDE1;min-height:64px;display:flex;align-items:center;justify-content:center;padding:0 140px;position:relative}
+.back{position:absolute;left:16px;top:10px;display:inline-flex;align-items:center;gap:2px;color:#2B2F33;font-size:15px;min-height:44px;padding:0 8px}
+.content{padding:24px 32px 48px;display:flex;flex-direction:column;gap:20px;max-width:1000px;width:100%}
+.chead{padding:16px 24px;border-bottom:1px solid #E6E8EB}
+.sbody{padding:20px 24px 24px;display:flex;flex-direction:column;gap:8px}
+.dl{display:grid;grid-template-columns:200px minmax(0,1fr);margin:0;padding:4px 24px 12px}
+.dl dt,.dl dd{margin:0;padding:12px 0;border-bottom:1px solid #E6E8EB}
+.dl dt{font-size:14px;font-weight:500}
+.tag{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:#5F6770}
+.var{display:flex;flex-direction:column;gap:12px}
+</style>
+</helmet>
+<div>
+  <header class="top">
+    <div style="display: flex; align-items: center; gap: 6px">
+      <button class="tb" type="button" aria-label="Toggle navigation" aria-expanded="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg></button>
+      <a href="Home.dc.html" aria-label="Demo Banking, Home" style="display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none">
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5h8.5a11 11 0 0 1 0 22H7z"></path><path d="M12 16h9"></path><path d="M17.5 12l4 4-4 4"></path></svg>
+        <span style="font-size: 17px; letter-spacing: 0.04em" aria-hidden="true"><span style="font-weight: 600">DEMO</span> <span style="font-weight: 300">BANKING</span></span>
+      </a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px">
+      <span class="sm" style="color: #E3E6E9">Kenji Watanabe</span>
+      <button class="tb" type="button" style="padding: 0 12px">Log out</button>
+    </div>
+  </header>
+  <div class="wrap">
+    <nav class="side" aria-label="Main">
+      <ul class="nav">
+        <li><a class="home" href="Home.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Home</a></li>
+      </ul>
+      <div class="navgrp">Accounts</div>
+      <ul class="nav">
+        <li><a href="AccountDetail.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>Account information</a></li>
+        <li><a href="Activity.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"></path><path d="M14 3v5h5M9 13h6M9 17h6"></path></svg>Account activity</a></li>
+        <li><a href="Insights.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg>Insights</a></li>
+      </ul>
+      <div class="navgrp">Transfers</div>
+      <ul class="nav">
+        <li><a href="TransferRecipient.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>New transfer</a></li>
+      </ul>
+      <div class="navgrp">Demo</div>
+      <ul class="nav">
+        <li><a href="Main.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"></path></svg>Demo controls</a></li>
+      </ul>
+    </nav>
+
+    <main class="main">
+      <div class="pagebar">
+        <a class="back" href="Activity.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>Back</a>
+        <h1 tabindex="-1">Activity details</h1>
+      </div>
+      <div class="content">
+        <section class="card" aria-labelledby="summary-h">
+          <div class="chead" style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap">
+            <h2 id="summary-h">Activity Summary</h2><span class="num" style="font-size:30px;font-weight:300">−¥25,000</span>
+          </div>
+          <dl class="dl">
+            <dt>Description</dt><dd>To SUZUKI HARUTO</dd>
+            <dt>Activity status</dt><dd class="warn">Pending</dd>
+            <dt>Type</dt><dd>Outgoing transfer · Money out</dd>
+            <dt>Account</dt><dd><a href="AccountDetail.dc.html">Everyday</a> · <span class="num">•••2481</span></dd>
+            <dt>Category</dt><dd>Transfer</dd>
+            <dt>Counterparty</dt><dd>SUZUKI HARUTO</dd>
+            <dt>Occurred</dt><dd>1 Nov 2026, 18:20 JST</dd>
+            <dt>Activity ID</dt><dd class="num">ACT-8K2Q-4M7D</dd>
+          </dl>
+        </section>
+        <section class="card" aria-labelledby="details-h">
+          <div class="chead"><h2 id="details-h">Transfer Details</h2></div>
+          <div class="sbody" role="region" aria-labelledby="status-h">
+            <h3 id="status-h" tabindex="-1" class="sm muted">Transfer status</h3>
+            <span class="st proc">Processing</span>
+            <p class="sm">Your order was received. ¥25,000 is reserved in Everyday while it's processed. This page updates automatically.</p>
+          </div>
+          <dl class="dl">
+            <dt>Transfer ID</dt><dd class="num">TRF-8K2Q-4M7D</dd>
+            <dt>From</dt><dd><a href="AccountDetail.dc.html">Everyday</a> · <span class="num">•••2481</span></dd>
+            <dt>Recipient</dt><dd>SUZUKI HARUTO <span class="sm muted">· Registered at the bank</span></dd>
+            <dt>Bank</dt><dd>Minato Bank <span class="muted num">(0152)</span> · <span class="num">•••2733</span></dd>
+            <dt>Transfer type</dt><dd>To another bank</dd>
+            <dt>Amount</dt><dd class="num">¥25,000</dd>
+            <dt>Fee</dt><dd class="num">¥0</dd>
+            <dt>Reference</dt><dd>Dinner split</dd>
+            <dt>Created</dt><dd class="num">1 Nov 2026, 18:20:04 JST</dd>
+          </dl>
+          <div class="actions" style="padding:20px 24px"><a class="btn btn-outline" href="Activity.dc.html">Account activity</a><a class="btn btn-primary" href="Home.dc.html">Back to Home</a></div>
+        </section>
+
+        <div style="border-top: 1px dashed #C8CDD3; margin-top: 16px; padding-top: 24px; display: flex; flex-direction: column; gap: 32px">
+          <h2 class="sm muted" style="font-weight: 500">Status variants — only the status block and the action bar change</h2>
+
+          <section class="var" aria-label="Completed variant">
+            <span class="tag">completed</span>
+            <div class="card"><div class="chead"><h2>Transfer status</h2></div>
+              <div class="sbody">
+                <span class="st ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8 12l3 3 5-6"></path></svg>Completed</span>
+                <p class="sm num">¥25,000 was sent to SUZUKI HARUTO on 1 Nov 2026 at 18:20:06 JST.</p>
+              </div>
+            </div>
+            <div class="actions"><a class="btn btn-outline" href="Activity.dc.html">Account activity</a><a class="btn btn-primary" href="TransferRecipient.dc.html">Make another transfer</a></div>
+          </section>
+
+          <section class="var" aria-label="Failed variant">
+            <span class="tag">failed · RECIPIENT_NAME_MISMATCH</span>
+            <div class="card"><div class="chead"><h2>Transfer status</h2></div>
+              <div class="sbody">
+                <span class="st bad"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M15 9l-6 6M9 9l6 6"></path></svg>Failed</span>
+                <p class="sm">The name you entered doesn't match the name registered at the bank. Your money was not moved — the ¥30,000 hold has been released.</p>
+              </div>
+            </div>
+            <div class="actions"><a class="btn btn-outline" href="Activity.dc.html">Account activity</a><a class="btn btn-primary" href="TransferRecipient.dc.html">Make a corrected transfer</a></div>
+          </section>
+
+          <section class="var" aria-label="Delayed variant">
+            <span class="tag">processing · delayed (delayedSince set) / slower checks after 2 min</span>
+            <div class="card"><div class="chead"><h2>Transfer status</h2></div>
+              <div class="sbody">
+                <span class="st warn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Delayed — still processing</span>
+                <p class="sm">The recipient's bank hasn't confirmed this transfer yet. It has not failed and it won't be sent twice. <button class="lk" type="button">Check again</button></p>
+              </div>
+            </div>
+            <div class="actions"><a class="btn btn-outline" href="Activity.dc.html">Account activity</a><a class="btn btn-primary" href="Home.dc.html">Back to Home</a></div>
+            <p class="xs muted" style="text-align: center">After 10 s without delayedSince the message reads “Taking longer than usual…”. “Check again” is a text link inside the message, aligned with the copy.</p>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

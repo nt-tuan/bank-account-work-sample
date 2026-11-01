@@ -1,0 +1,25 @@
+/* Data tables: header and cell rules reach every th/td, which utilities on each cell would repeat. */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-md);
+}
+.table th {
+  text-align: left;
+  font-weight: 400;
+  padding: 12px 20px;
+  border-bottom: 2px solid var(--color-table-head);
+  white-space: nowrap;
+}
+.table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--color-row-divider);
+  vertical-align: top;
+}
+.table tbody tr:hover {
+  background: var(--color-row-hover);
+}
+/* Numeric column. Lives here because module rules outrank utilities such as text-right. */
+.table .r {
+  text-align: right;
+}

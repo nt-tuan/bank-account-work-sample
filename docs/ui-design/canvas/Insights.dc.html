@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Insights</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F4F5F7;color:#2B2F33;font-family:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.6;font-weight:400}
+*{box-sizing:border-box}
+a{color:#0066C0;text-decoration:none}a:hover{color:#0052A3;text-decoration:underline}
+h1,h2,h3{margin:0;font-weight:500;line-height:1.35}
+h1{font-size:18px}h2{font-size:16px}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:#5F6770}.sm{font-size:13px}.xs{font-size:12px}
+.card{background:#fff;border-radius:4px}
+.lk{display:inline-flex;align-items:center;gap:4px;font-size:14px;background:none;border:0;padding:0;font-family:inherit;color:#0066C0;cursor:pointer;min-height:32px}
+.top{height:56px;background:#2B2F33;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px 0 8px;gap:16px}
+.tb{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;background:transparent;border:0;color:#fff;cursor:pointer;border-radius:4px;font-family:inherit;font-size:14px}
+.wrap{display:flex;flex-wrap:wrap;align-items:stretch;min-height:1144px}
+.side{flex:1 0 240px;max-width:240px;background:#2B2F33;color:#fff;padding:8px 0 24px}
+.navgrp{font-size:13px;color:#C9CED3;padding:20px 20px 4px}
+.nav{list-style:none;margin:0;padding:0}
+.nav a{display:flex;align-items:center;gap:12px;min-height:48px;padding:0 20px 0 32px;color:#fff;font-size:15px;text-decoration:none}
+.nav a.home{padding-left:20px}
+.nav a:hover{background:#383D42;color:#fff;text-decoration:none}
+.nav a[aria-current="page"]{background:#fff;color:#2B2F33}
+.main{flex:999 1 560px;min-width:0;display:flex;flex-direction:column}
+.pagebar{background:#fff;border-bottom:1px solid #DADDE1;min-height:64px;display:flex;align-items:center;padding:0 32px;gap:16px}
+.content{padding:24px 32px 48px;display:flex;flex-direction:column;gap:20px;max-width:1264px;width:100%}
+.field{display:flex;align-items:center;gap:10px;min-width:0}
+.label{font-size:13px;font-weight:500;white-space:nowrap}
+.input{min-height:44px;padding:9px 12px;border:1px solid #8C949C;border-radius:4px;font:inherit;font-size:14px;background:#fff;color:#2B2F33;width:100%}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.chead{padding:16px 24px;border-bottom:1px solid #E6E8EB;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.catrow{display:grid;grid-template-columns:120px minmax(0,1fr) 96px;gap:12px;align-items:center;min-height:34px;color:#2B2F33;border-radius:2px;padding:0 4px}
+.catrow:hover{background:#F4F5F7;text-decoration:none;color:#2B2F33}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;font-weight:400;padding:8px 12px;border-bottom:2px solid #C8CDD3}
+.tbl td{padding:8px 12px;border-bottom:1px solid #E6E8EB}
+.tbl .r{text-align:right}
+@media (max-width:1100px){.cols{grid-template-columns:repeat(1,minmax(0,1fr))}}
+</style>
+</helmet>
+<div>
+  <header class="top">
+    <div style="display: flex; align-items: center; gap: 6px">
+      <button class="tb" type="button" aria-label="Toggle navigation" aria-expanded="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg></button>
+      <a href="Home.dc.html" aria-label="Demo Banking, Home" style="display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none">
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5h8.5a11 11 0 0 1 0 22H7z"></path><path d="M12 16h9"></path><path d="M17.5 12l4 4-4 4"></path></svg>
+        <span style="font-size: 17px; letter-spacing: 0.04em" aria-hidden="true"><span style="font-weight: 600">DEMO</span> <span style="font-weight: 300">BANKING</span></span>
+      </a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px">
+      <span class="sm" style="color: #E3E6E9">Kenji Watanabe</span>
+      <button class="tb" type="button" style="padding: 0 12px">Log out</button>
+    </div>
+  </header>
+  <div class="wrap">
+    <nav class="side" aria-label="Main">
+      <ul class="nav">
+        <li><a class="home" href="Home.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Home</a></li>
+      </ul>
+      <div class="navgrp">Accounts</div>
+      <ul class="nav">
+        <li><a href="AccountDetail.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>Account information</a></li>
+        <li><a href="Activity.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"></path><path d="M14 3v5h5M9 13h6M9 17h6"></path></svg>Account activity</a></li>
+        <li><a href="Insights.dc.html" aria-current="page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg>Insights</a></li>
+      </ul>
+      <div class="navgrp">Transfers</div>
+      <ul class="nav">
+        <li><a href="TransferRecipient.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>New transfer</a></li>
+      </ul>
+      <div class="navgrp">Demo</div>
+      <ul class="nav">
+        <li><a href="Main.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"></path></svg>Demo controls</a></li>
+      </ul>
+    </nav>
+
+    <main class="main">
+      <div class="pagebar"><h1 tabindex="-1">Insights</h1></div>
+      <div class="content">
+        <form class="card" style="padding: 16px 24px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center">
+          <div class="field" style="width: 260px"><label class="label" for="m">Month</label><select class="input" id="m"><option>October 2026</option></select></div>
+          <div class="field" style="width: 320px"><label class="label" for="a">Account</label><select class="input" id="a"><option>All accounts</option><option>Everyday ••••2481</option></select></div>
+          <p class="sm muted">Posted activity only. Transfers, pending and cancelled entries are excluded.</p>
+        </form>
+
+        <div class="tiles">
+          <div class="card" style="padding: 20px 24px; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap">
+            <span style="display: flex; gap: 8px; align-items: center; font-weight: 500"><span style="width: 10px; height: 10px; border-radius: 2px; background: #2F7BD0" aria-hidden="true"></span>Income</span>
+            <span style="display: flex; flex-direction: column; align-items: flex-end"><span class="num" style="font-size: 30px; font-weight: 300; line-height: 1.2">¥316,500</span><span class="sm muted">Salary ¥312,000 · Other ¥4,500</span></span>
+          </div>
+          <div class="card" style="padding: 20px 24px; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap">
+            <span style="display: flex; gap: 8px; align-items: center; font-weight: 500"><span style="width: 10px; height: 10px; border-radius: 2px; background: #D97A2B" aria-hidden="true"></span>Spending</span>
+            <span style="display: flex; flex-direction: column; align-items: flex-end"><span class="num" style="font-size: 30px; font-weight: 300; line-height: 1.2">¥261,900</span><span class="sm muted">+¥22,200 vs September</span></span>
+          </div>
+        </div>
+
+        <div class="cols">
+          <section class="card" aria-labelledby="cat">
+            <div class="chead"><h2 id="cat">Spending by category</h2><button class="lk" type="button" aria-pressed="false">Show as table</button></div>
+            <div style="padding: 12px 20px 16px; display: flex; flex-direction: column; gap: 2px">
+              <sc-for list="{{ cats }}" as="c" hint-placeholder-count="12">
+                <a class="catrow" href="Activity.dc.html" aria-label="{{ c.aria }}">
+                  <span class="sm">{{ c.name }}</span>
+                  <span style="display: block; background: #F1F2F4; border-radius: 0 4px 4px 0" aria-hidden="true"><span style="display: block; height: 12px; background: #D97A2B; border-radius: 0 4px 4px 0; width: {{ c.w }}"></span></span>
+                  <span class="sm num" style="text-align: right">{{ c.amt }}</span>
+                </a>
+              </sc-for>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="trend">
+            <div class="chead">
+              <h2 id="trend">Six-month trend</h2>
+              <div class="sm" style="display: flex; gap: 16px">
+                <span style="display: inline-flex; gap: 6px; align-items: center"><span style="width: 10px; height: 10px; border-radius: 2px; background: #2F7BD0" aria-hidden="true"></span>Income</span>
+                <span style="display: inline-flex; gap: 6px; align-items: center"><span style="width: 10px; height: 10px; border-radius: 2px; background: #D97A2B" aria-hidden="true"></span>Spending</span>
+              </div>
+            </div>
+            <div style="padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 8px">
+              <div style="position: relative; display: flex; gap: 8px; align-items: flex-end; height: 240px; border-bottom: 1px solid #8C949C; padding: 0 4px 0 44px" aria-hidden="true">
+                <div style="position: absolute; left: 44px; right: 0; bottom: 100px; border-top: 1px solid #EEF0F2"></div>
+                <div style="position: absolute; left: 44px; right: 0; bottom: 200px; border-top: 1px solid #EEF0F2"></div>
+                <span class="xs muted" style="position: absolute; left: 0; bottom: 192px">¥500k</span>
+                <span class="xs muted" style="position: absolute; left: 0; bottom: 92px">¥250k</span>
+                <sc-for list="{{ months }}" as="m" hint-placeholder-count="6">
+                  <div style="flex: 1 1 0; display: flex; justify-content: center; gap: 2px; align-items: flex-end; height: 100%; background: {{ m.bg }}; border-radius: 2px">
+                    <span style="width: 16px; background: #2F7BD0; border-radius: 4px 4px 0 0; height: {{ m.ih }}"></span>
+                    <span style="width: 16px; background: #D97A2B; border-radius: 4px 4px 0 0; height: {{ m.sh }}"></span>
+                  </div>
+                </sc-for>
+                <div style="position: absolute; right: 4px; top: 4px; background: #2B2F33; color: #fff; border-radius: 4px; padding: 8px 12px; font-size: 12px; white-space: nowrap"><span style="font-weight: 500">October 2026</span><br>Income ¥316,500<br>Spending ¥261,900</div>
+              </div>
+              <div style="display: flex; gap: 8px; padding: 0 4px 0 44px">
+                <sc-for list="{{ months }}" as="m" hint-placeholder-count="6">
+                  <a href="Activity.dc.html" class="sm num" style="flex: 1 1 0; text-align: center; font-weight: {{ m.fw }}">{{ m.label }}</a>
+                </sc-for>
+              </div>
+              <table class="tbl" style="margin-top: 12px">
+                <caption class="xs muted" style="text-align: left; padding-bottom: 6px">Table equivalent</caption>
+                <thead><tr><th scope="col">Month</th><th scope="col" class="r">Income</th><th scope="col" class="r">Spending</th></tr></thead>
+                <tbody>
+                  <sc-for list="{{ months }}" as="m" hint-placeholder-count="6">
+                    <tr><td>{{ m.full }}</td><td class="r num">{{ m.inc }}</td><td class="r num">{{ m.sp }}</td></tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const fmt = (n) => '¥' + n.toLocaleString('en-US');
+    const catData = [
+      ['Housing', 98000], ['Groceries', 42380], ['Dining', 27150], ['Shopping', 21600], ['Utilities', 18920], ['Travel', 15000],
+      ['Transport', 12400], ['Entertainment', 9800], ['Health', 6200], ['Subscriptions', 4970], ['Education', 3300], ['Other', 2180]
+    ];
+    const cats = catData.map(([name, v]) => ({
+      name, amt: fmt(v), w: Math.max(2, v / 98000 * 100).toFixed(1) + '%',
+      aria: name + ', ' + fmt(v) + ', ' + (v / 261900 * 100).toFixed(1) + '% of spending. View activity'
+    }));
+    const md = [
+      ['May', 'May 2026', 312000, 248300], ['Jun', 'June 2026', 312000, 271900], ['Jul', 'July 2026', 548000, 305400],
+      ['Aug', 'August 2026', 312000, 288100], ['Sep', 'September 2026', 314200, 239700], ['Oct', 'October 2026', 316500, 261900]
+    ];
+    const months = md.map(([label, full, i, s], idx) => ({
+      label, full, inc: fmt(i), sp: fmt(s),
+      ih: Math.round(i / 500000 * 200) + 'px', sh: Math.round(s / 500000 * 200) + 'px',
+      bg: idx === 5 ? '#F4F5F7' : 'transparent', fw: idx === 5 ? '600' : '400'
+    }));
+    return { cats, months };
+  }
+}
+</script>
+</body>
+</html>

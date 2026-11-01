@@ -1,0 +1,63 @@
+@import 'tailwindcss' source('../');
+@import './tokens.css';
+
+/* Element defaults only. Components are styled with utilities (and CSS Modules for complex cases). */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: 500;
+    line-height: 1.35;
+  }
+  h1 {
+    font-size: var(--text-xl);
+  }
+  h2 {
+    font-size: var(--text-lg);
+  }
+  h3 {
+    font-size: var(--text-base);
+  }
+  a {
+    color: var(--color-action);
+  }
+  a:hover {
+    color: var(--color-action-hover);
+    text-decoration: underline;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-action);
+    outline-offset: 2px;
+  }
+  [tabindex='-1']:focus {
+    outline: none;
+  }
+  /* Preflight makes SVGs block-level; icons here sit inline with text. */
+  svg {
+    display: inline;
+    vertical-align: baseline;
+  }
+  fieldset {
+    min-width: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
