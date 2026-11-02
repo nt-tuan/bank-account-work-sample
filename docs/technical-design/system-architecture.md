@@ -186,7 +186,7 @@ sequenceDiagram
         API->>DB: Read owned order
         DB-->>API: Consistent current state
         API-->>Monitor: Processing/Completed/Failed and order details
-        Monitor->>Monitor: Update shared cache; invalidate dependents on outcome
+        Monitor->>Monitor: Update shared cache, invalidate dependents on outcome
         opt Activity Details is mounted
             UI->>API: Refresh activity and embedded order together
             API-->>UI: Consistent ledger and transfer view
