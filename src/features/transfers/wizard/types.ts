@@ -2,10 +2,11 @@ import type { RecipientNameSource, TransferDestinationKind } from '@domain/domai
 import type { SubmissionAttempt } from '../submission/submit.ts';
 import type { AccountSummary, Bank, TransferCommand } from '@domain/schemas/api.ts';
 
-/** Rejection recovery: invalidate discards the review; renew retains it with a fresh idempotency key. */
+/** Rejection recovery: invalidate discards the review; renew changes its key; keep preserves both. */
 export enum ReviewPolicy {
   Invalidate = 'invalidate',
   Renew = 'renew',
+  Keep = 'keep',
 }
 
 /** Client submission state; unknown retains the review and key for a safe retry. */

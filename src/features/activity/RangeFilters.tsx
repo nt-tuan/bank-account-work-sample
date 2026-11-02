@@ -4,6 +4,7 @@ import { monthsEndingAt } from '@domain/time.ts';
 import { PageLink as Link } from '@/shared/navigation/PageLink.tsx';
 import type { ActivityFilters, SetActivityFilters } from './filters.ts';
 import { RangeForm } from './RangeForm.tsx';
+import { activityListHref } from './navigation.ts';
 
 type RangeFiltersProps = {
   filters: ActivityFilters;
@@ -23,8 +24,6 @@ export function RangeFilters({
   const thisMonth = currentJstMonth();
   const month = filters.month ?? thisMonth;
   const applyRange = (from: string, to: string) => setFilters({ from, to, month: undefined });
-  const selectMonth = (month: string) =>
-    setFilters({ month: month === thisMonth ? undefined : month });
   return rangeOpen ? (
     <RangeForm
       key={`${filters.from ?? ''}:${filters.to ?? ''}`}
@@ -40,12 +39,8 @@ export function RangeFilters({
           <Link
             key={m}
             className={ui.tab}
-            to={`?month=${m}`}
+            to={activityListHref(filters, { month: m === thisMonth ? undefined : m })}
             aria-current={m === month ? 'page' : undefined}
-            onClick={(e) => {
-              e.preventDefault();
-              selectMonth(m);
-            }}
           >
             <span className="sr-only">{formatMonth(m)}</span>
             <span aria-hidden="true">{formatMonthTab(m)}</span>

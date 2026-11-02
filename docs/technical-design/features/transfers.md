@@ -131,20 +131,21 @@ TransferWizard
             │    └─ useTransferDraft   review snapshot and idempotency key
             ├─ TransferProgress, SourceSummary
             ├─ SourceStep | DestinationStep | AmountStep     (only the current step is mounted)
-            ├─ ReviewController → useTransferSubmission → ReviewStep
-            └─ LeaveGuardController   dirty state, route blocker, leave dialog
+            ├─ useTransferSubmission   submission state shared by Review and leave guard
+            ├─ ReviewStep
+            └─ LeaveGuardController   dirty state, submission-aware route blocker and leave dialog
 ```
 
 ```tsx
 <SourceStep onNext={() => goTo(TransferStep.Destination)} />
 <DestinationStep onNext={() => goTo(TransferStep.Amount)} />
 <AmountStep onNext={openReview} />
-<ReviewController onResult={handleSubmissionResult} onEdit={goTo} onCreated={onCreated} />
+<ReviewStep submission={submission} onConfirm={confirmReview} onEdit={goTo} />
 ```
 
-- **Steps own validation; the wizard owns navigation.** Each step validates with local functions (`validateSource`, `validateDestination`, `validateAmount`) built on the shared parsers, sets its field errors, clears the wizard's server error (`onAttempt`), and calls `onNext` when complete. Steps read errors with a field-scoped `useFormState` and values with `useWatch`, so field edits, lookups, submission phases and dialog updates do not re-render sibling components.
+- **Steps own validation; the wizard owns navigation and submission.** Each step validates with local functions (`validateSource`, `validateDestination`, `validateAmount`) built on the shared parsers, sets its field errors, clears the wizard's server error (`onAttempt`), and calls `onNext` when complete. Steps read errors with a field-scoped `useFormState` and values with `useWatch`, keeping field edits and lookup updates local. Submission state lives in `TransferFlow` so Review and the leave guard cannot disagree about an uncertain outcome.
 - **Defaults** (`TransferFormRoot`): a route-state `prefill` (corrected transfer) wins over `?from=<accountId>` (account-detail entry, accepted only for an account that can send). With a preselected source the wizard opens at **To**, with a summary bar and a Change link.
-- **Destination**: Own accounts lists the customer's other accounts, unusable ones visible but disabled with the reason; Someone else runs the recipient lookup ([Recipient lookup](recipient-lookup.md)). The form stores `recipientName` and `recipientNameSource` (`lookup`/`manual`, `null` until accepted).
+- **Destination**: Own accounts lists the customer's other accounts, unusable ones visible but disabled with the reason; validation also requires a current, distinct account that can receive. Changing the source clears an own destination that becomes the source. Someone else runs the recipient lookup ([Recipient lookup](recipient-lookup.md)). The form stores `recipientName` and `recipientNameSource` (`lookup`/`manual`, `null` until accepted).
 - **Amount** shows the source's available balance, the limit and zero fee; it pre-checks the amount against the limit (`transferLimitMessage`) and the available balance for inline errors. The server remains authoritative.
 - **Review** shows the immutable snapshot: source, destination, bank, recipient name and whether it was registered at the bank or entered by the customer, amount, zero fee, reference and the resulting available balance. Change links return to a step without discarding other fields.
 - `buildTransferCommand(values)` reads only form values and refuses a recipient whose name source was never accepted.
@@ -157,6 +158,7 @@ TransferWizard
 | Enter Review                                                               | Build the command; keep the existing snapshot and key if the command is unchanged, otherwise a new `crypto.randomUUID()` (generated outside a state updater). |
 | Any form value changes while a snapshot exists                             | Invalidate the snapshot; the next Review gets a new key.                                                                                                      |
 | Automatic retry, or Try again after unknown                                | Same snapshot, same key; Confirm never rebuilds the command from the form.                                                                                    |
+| `CSRF_INVALID`                                                             | Keep the snapshot and key. Refresh credentials, then wait for explicit retry; an earlier unknown outcome stays unknown.                                       |
 | Rejection that returns to Source/Destination/Amount                        | Invalidate the snapshot.                                                                                                                                      |
 | Rejection that stays on Review (`IDEMPOTENCY_KEY_REUSED`, `503`, unmapped) | Keep the command, renew the key.                                                                                                                              |
 | `401`                                                                      | Global handler; the draft is discarded with all client state.                                                                                                 |
@@ -166,7 +168,7 @@ TransferWizard
 
 `submitTransfer(send, opts)` sends the order and retries only on `unknown` failures, up to two more attempts after 1 s and 3 s with ±20 % jitter, always with the same key and body. `random` and `sleep` are injectable for tests. Its result is `created | rejected | unknown`; there is no "failed" variant.
 
-`useTransferSubmission` (mounted only while Review is) guards against double confirmation with an in-flight ref, before React renders the disabled button; announces "Submitting transfer…" / "Still trying to reach the bank…"; and aborts on unmount.
+`useTransferSubmission` lives for the wizard's lifetime. It guards against double confirmation with an in-flight ref, before React renders the disabled button; announces "Submitting transfer…" / "Still trying to reach the bank…"; and aborts on wizard unmount. A CSRF rejection occurs before idempotency replay lookup, so it cannot resolve an earlier unknown attempt. This remains true across manual retries.
 
 | Result         | UI                                                                                                                                                                                                                                                                                                                   |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -179,7 +181,7 @@ TransferWizard
 
 Customer copy for rejections and execution failures lives in `messages.ts`. For `SOURCE_UNAVAILABLE` and `TRANSFER_LIMIT_EXCEEDED` the wizard shows the server's message, which carries the restriction reason or the customer's limit.
 
-**Leaving the wizard.** `LeaveGuardController` blocks route changes with `useBlocker` and covers reloads with `beforeunload` when the form is dirty or the customer has moved past the initial step, unless an order was created or a deliberate navigation (logout, 401, reset) set the bypass. The dialog (Radix `AlertDialog`) offers Keep editing / Leave. The step lives in component state, not the URL, because a reload cannot restore the draft.
+**Leaving the wizard.** `LeaveGuardController` blocks route changes with `useBlocker` and covers reloads with `beforeunload` when the form is dirty or the customer has moved past the initial step, unless an order was created or a deliberate navigation (logout, 401, reset) set the bypass. The dialog (Radix `AlertDialog`) offers Keep editing / Leave. During submission or an unknown outcome, it warns that the transfer may already have been sent, leaving does not cancel it, and activity must be checked before sending again. Only an unsent or definitively rejected draft may say nothing was sent. The step lives in component state, not the URL, because a reload cannot restore the draft.
 
 ### Session-owned transfer tracking
 

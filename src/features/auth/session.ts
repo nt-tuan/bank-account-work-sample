@@ -6,6 +6,7 @@ import { csrfStore, isRejected } from '@/shared/api/http.ts';
 import { qk } from '@/shared/api/keys.ts';
 import { navigationBypass } from '@/shared/navigation/bypass.ts';
 import { getTransferMonitor } from '@/features/transfers/index.ts';
+import type { Session } from '@domain/schemas/api.ts';
 
 async function fetchSession(signal?: AbortSignal) {
   const session = await api.session(signal);
@@ -24,6 +25,26 @@ export const sessionOptions = () =>
     staleTime: Infinity,
     retry: 1,
   });
+
+/** Preserve a draft only when fresh credentials still belong to its original customer. */
+export async function refreshSessionForCustomer(
+  queryClient: QueryClient,
+): Promise<boolean | undefined> {
+  const previous = queryClient.getQueryData<Session>(qk.session);
+  const next = await api.session();
+  // Logout or another session transition wins over a late recovery response.
+  if (queryClient.getQueryData(qk.session) !== previous) return undefined;
+  if (
+    !previous?.authenticated ||
+    !previous.customer ||
+    !next.authenticated ||
+    next.customer?.id !== previous.customer.id
+  )
+    return false;
+  csrfStore.set(next.csrfToken);
+  queryClient.setQueryData(qk.session, next);
+  return true;
+}
 
 /** Login route that returns to `returnTo` (a same-app path) after sign-in. */
 export const loginPath = (returnTo: string) => `/login?returnTo=${encodeURIComponent(returnTo)}`;

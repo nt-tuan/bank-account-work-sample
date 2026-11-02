@@ -239,6 +239,106 @@ describe('wizard controllers and order lifecycle', () => {
     vi.restoreAllMocks();
   });
 
+  it('clears a destination that becomes the source and requires a new selection', async () => {
+    const user = userEvent.setup();
+    await reviewOwnTransfer(user);
+    await user.click(screen.getByRole('button', { name: 'Change source account' }));
+    await user.click(screen.getByRole('radio', { name: /^Savings/ }));
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByRole('heading', { name: 'Who are you sending to?' })).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent('Choose an account to send to.');
+    await user.click(screen.getByRole('radio', { name: /^Everyday/ }));
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByLabelText(/Amount/)).toHaveValue('100');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByRole('heading', { name: 'Review your transfer' })).toBeInTheDocument();
+  });
+
+  it('revalidates a selected destination when refreshed accounts can no longer receive', async () => {
+    const user = userEvent.setup();
+    const { client } = await reviewOwnTransfer(user);
+    await user.click(screen.getByRole('button', { name: 'Change destination' }));
+    act(() => {
+      client.setQueryData<AccountSummary[]>(qk.accounts.all, (accounts) =>
+        accounts?.map((account) =>
+          account.id === 'acc_savings' ? { ...account, canReceive: false } : account,
+        ),
+      );
+    });
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      "This account can't receive transfers right now.",
+    );
+    expect(screen.getByRole('heading', { name: 'Who are you sending to?' })).toBeInTheDocument();
+  });
+
+  it('warns about a possibly sent transfer while submission is still pending', async () => {
+    createTransfer.mockReturnValue(new Promise(() => {}));
+    const user = userEvent.setup();
+    await reviewOwnTransfer(user);
+    await user.click(screen.getByRole('button', { name: 'Confirm transfer' }));
+    await user.click(screen.getByRole('link', { name: 'Home' }));
+    expect(await screen.findByRole('alertdialog')).toHaveTextContent('Leaving does not cancel it.');
+    expect(screen.getByRole('alertdialog')).not.toHaveTextContent('Nothing has been sent.');
+  });
+
+  it('preserves the review key after a CSRF rejection and waits for an explicit retry', async () => {
+    createTransfer
+      .mockRejectedValueOnce(
+        new ApiError({
+          kind: ApiFailureKind.Rejected,
+          status: 403,
+          code: ErrorCode.CSRF_INVALID,
+          message: 'Your session was refreshed. Please try again.',
+        }),
+      )
+      .mockResolvedValue({
+        id: 'TRF-created',
+        sourceActivityId: 'ACT-created',
+        status: 'processing',
+      });
+    const user = userEvent.setup();
+    await reviewOwnTransfer(user);
+    await user.click(screen.getByRole('button', { name: 'Confirm transfer' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Your session was refreshed.');
+    expect(createTransfer).toHaveBeenCalledTimes(1);
+    await user.click(screen.getByRole('button', { name: 'Confirm transfer' }));
+    await screen.findByRole('heading', { name: 'Activity details' });
+    expect(createTransfer.mock.calls[1]!.slice(0, 2)).toEqual(
+      createTransfer.mock.calls[0]!.slice(0, 2),
+    );
+  });
+
+  it('keeps an earlier unknown outcome and key through CSRF rejections on automatic and manual retry', async () => {
+    createTransfer
+      .mockRejectedValueOnce(
+        new ApiError({
+          kind: ApiFailureKind.Unknown,
+          cause: UnknownFailureCause.Network,
+        }),
+      )
+      .mockRejectedValue(
+        new ApiError({
+          kind: ApiFailureKind.Rejected,
+          status: 403,
+          code: ErrorCode.CSRF_INVALID,
+          message: 'CSRF',
+        }),
+      );
+    const user = userEvent.setup();
+    await reviewOwnTransfer(user);
+    await user.click(screen.getByRole('button', { name: 'Confirm transfer' }));
+    await screen.findByRole('heading', { name: "We couldn't confirm your transfer" });
+    expect(createTransfer).toHaveBeenCalledTimes(2);
+    await user.click(screen.getByRole('button', { name: 'Try again' }));
+    await screen.findByRole('heading', { name: "We couldn't confirm your transfer" });
+    expect(createTransfer).toHaveBeenCalledTimes(3);
+    for (const call of createTransfer.mock.calls)
+      expect(call.slice(0, 2)).toEqual(createTransfer.mock.calls[0]!.slice(0, 2));
+    expect(screen.queryByRole('button', { name: 'Change amount' })).not.toBeInTheDocument();
+  });
+
   it('keeps a review key when revisiting without edits and replaces it after an edit', async () => {
     const uuid = vi.spyOn(crypto, 'randomUUID');
     const user = userEvent.setup();
@@ -455,29 +555,25 @@ describe('wizard render isolation', () => {
     expect(renderSummary).toHaveBeenCalledTimes(amountSummaryRenders);
   });
 
-  it('keeps submission attempts, unknown and manual retry out of progress', async () => {
+  it('warns that a transfer may have been sent when leaving an unknown outcome', async () => {
     createTransfer.mockRejectedValue(
       new ApiError({ kind: ApiFailureKind.Unknown, cause: UnknownFailureCause.Network }),
     );
     const user = userEvent.setup();
     await reviewOwnTransfer(user);
-    const progressRenders = renderProgress.mock.calls.length;
     await user.click(screen.getByRole('button', { name: 'Confirm transfer' }));
     await screen.findByRole('heading', { name: "We couldn't confirm your transfer" });
     await user.click(screen.getByRole('button', { name: 'Try again' }));
     await screen.findByRole('heading', { name: "We couldn't confirm your transfer" });
     expect(createTransfer).toHaveBeenCalledTimes(6);
-    expect(renderProgress).toHaveBeenCalledTimes(progressRenders);
-  });
-
-  it('keeps blocker and dialog updates out of the current step', async () => {
-    const user = userEvent.setup();
-    await reviewOwnTransfer(user);
-    const progressRenders = renderProgress.mock.calls.length;
     await user.click(screen.getByRole('link', { name: 'Home' }));
-    await user.click(await screen.findByRole('button', { name: 'Keep editing' }));
-    expect(screen.getByRole('heading', { name: 'Review your transfer' })).toBeInTheDocument();
-    expect(renderProgress).toHaveBeenCalledTimes(progressRenders);
+    const dialog = await screen.findByRole('alertdialog');
+    expect(dialog).toHaveTextContent('Your transfer may already have been sent.');
+    expect(dialog).not.toHaveTextContent('Nothing has been sent.');
+    await user.click(screen.getByRole('button', { name: 'Keep editing' }));
+    expect(
+      screen.getByRole('heading', { name: "We couldn't confirm your transfer" }),
+    ).toBeInTheDocument();
   });
 });
 

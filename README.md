@@ -51,6 +51,8 @@ Fields, relationships, and the ER diagram live in the [domain model](docs/spec.m
 
 Tests leave `data/` untouched. E2E uses one worker and resets its databases before each test. See [testing strategy](docs/technical-design/architecture.md#9-testing-strategy) for coverage and [configuration](docs/technical-design/architecture.md#51-composition-root) for environment variables.
 
+GitHub Actions runs typecheck, lint, unit/integration tests, and the Chromium E2E suite on pushes and pull requests. Failed browser runs upload their traces under `playwright-results`.
+
 ## Trying the demo
 
 Kenji has six open accounts (including two restricted accounts) and over 300 activity entries across six months. **Demo controls** (sidebar → Demo, or Menu on mobile) lists example recipients and scenarios for failures, unknown outcomes, recovery, and session expiry.
@@ -85,5 +87,4 @@ Kenji has six open accounts (including two restricted accounts) and over 300 act
 
 - Local worksample; production banking security and deployment are outside scope. See [security boundary](docs/spec.md#9-authentication-and-security-boundary).
 - Seed dates move with each reset. Early in a month, use the month tabs to see more activity.
-- No CI is configured; run `npm run typecheck && npm run lint && npm test && npm run test:e2e`.
 - Google Fonts require network access; a system font is used offline.

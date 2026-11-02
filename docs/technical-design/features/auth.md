@@ -44,11 +44,12 @@ Login, protected routes, server sessions with an absolute expiry, CSRF protectio
 2. **Authentication** (everything except `GET /api/session` and `POST /api/session/login`): an authenticated session → else `401 SESSION_EXPIRED`.
 3. **CSRF token** (mutations only): `X-CSRF-Token` equals the session's token, constant-time → else `403 CSRF_INVALID`. Login uses the pre-login session's token.
 
-Authentication runs before the token check so that a request whose session has ended is reported as `401` and the client returns to login. If the token were checked first, the same request would fail as `403` with nothing to compare against, the review step would show a generic "could not be verified" error, and a logout after expiry would look unconfirmed. The statuses therefore have one meaning each: `401` = no live session → login; `403` = a live session's request failed verification → reload and retry. Turning `CSRF_INVALID` into a `401` was rejected because it would sign out a customer whose session is still valid. The order is safe because a request without a live session cannot change anything, and Origin still runs first.
+Authentication runs before the token check so that a request whose session has ended is reported as `401` and the client returns to login. If the token were checked first, the same request would fail as `403` with nothing to compare against, the review step would show a generic "could not be verified" error, and a logout after expiry would look unconfirmed. The statuses therefore have one meaning each: `401` = no live session → login; `403` = a live session's request failed verification → refresh credentials and request explicit retry. Turning `CSRF_INVALID` into a `401` was rejected because it would sign out a customer whose session is still valid. The order is safe because a request without a live session cannot change anything, and Origin still runs first.
 
 ### Client session
 
 - `useSession()` is the `['session']` query (`staleTime: Infinity`, one retry). `fetchSession` stores the CSRF token in `csrfStore` for the HTTP client.
+- Outside the explicit login/logout flows, `CSRF_INVALID` invokes one shared credential refresh for concurrent failures. `refreshSessionForCustomer` updates the token/session only for the original customer; an ended or different session clears customer data and goes to login. A late response after another session transition is ignored. The HTTP client never automatically replays the mutation. Same-customer recovery preserves the draft and idempotency key; an earlier unknown transfer remains unknown until replay confirms its outcome.
 - `ProtectedLayout` shows the shell skeleton while the session is pending, an error with Try again when discovery fails, and redirects anonymous visitors to `loginPath(path + search)`.
 - `LoginPage` accepts only a same-app `returnTo` (`safeReturnTo`). After login it navigates there with `replace`; it never resumes a money operation. A `403 CSRF_INVALID` at login (an expired pre-login session) refetches the session and asks the customer to try again.
 
@@ -67,7 +68,7 @@ The application composition root installs the transfer monitor once. Its session
 | Wrong username or password                  | `401 INVALID_CREDENTIALS`, one generic message; the login form stays.       |
 | Mutation from another origin                | `403 CSRF_INVALID`, before the session is consulted.                        |
 | Any request after expiry, logout or restart | `401 SESSION_EXPIRED` → global handler → login with `returnTo`.             |
-| Live session, stale or missing CSRF token   | `403 CSRF_INVALID`; the client keeps the session and asks to reload.        |
+| Live session, stale or missing CSRF token   | `403 CSRF_INVALID`; refresh credentials, then require explicit retry.       |
 | Logout cannot reach the server              | Local data cleared; login page reports the unconfirmed sign-out with retry. |
 
 ## 6. Design choices

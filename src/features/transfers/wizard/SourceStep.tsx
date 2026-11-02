@@ -23,7 +23,7 @@ export function validateSource(values: TransferValues, accounts: AccountSummary[
 
 export function SourceStep({ accounts, onNext, onAttempt, error }: SourceStepProps) {
   const headingRef = useStepHeadingFocus();
-  const { register, control, getValues, clearErrors, setError, setFocus } =
+  const { register, control, getValues, clearErrors, setError, setFocus, setValue } =
     useFormContext<TransferValues>();
   const { errors } = useFormState({ control, name: 'sourceAccountId', exact: true });
   const next = () => {
@@ -33,7 +33,11 @@ export function SourceStep({ accounts, onNext, onAttempt, error }: SourceStepPro
     if (message) {
       setError('sourceAccountId', { message });
       setFocus('sourceAccountId');
-    } else onNext();
+    } else {
+      if (getValues('destAccountId') === getValues('sourceAccountId'))
+        setValue('destAccountId', '', { shouldDirty: true });
+      onNext();
+    }
   };
   return (
     <>

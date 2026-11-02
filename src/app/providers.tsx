@@ -1,10 +1,10 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
-import { onUnauthenticated } from '@/shared/api/http.ts';
+import { onUnauthenticated, onCsrfInvalid } from '@/shared/api/http.ts';
 import { qk } from '@/shared/api/keys.ts';
 import { LiveRegionProvider } from '@/shared/ui/live-region.tsx';
 import { navigationBypass } from '@/shared/navigation/bypass.ts';
-import { clearCustomerData, loginPath } from '@/features/auth/index.ts';
+import { clearCustomerData, loginPath, refreshSessionForCustomer } from '@/features/auth/index.ts';
 import { router } from './router.tsx';
 import { queryClient } from './query-client.ts';
 import { pages } from './routing/routes.tsx';
@@ -18,7 +18,7 @@ const prefetch = (href: string) => {
 
 /** Global 401: clear customer data and return to login. A later login never resumes a money operation (spec §9). */
 let handling = false;
-onUnauthenticated(() => {
+const handleUnauthenticated = () => {
   if (handling || window.location.pathname === '/login') return;
   handling = true;
   const returnTo = window.location.pathname + window.location.search;
@@ -33,6 +33,12 @@ onUnauthenticated(() => {
       navigationBypass.active = false;
       handling = false;
     });
+};
+onUnauthenticated(handleUnauthenticated);
+onCsrfInvalid(async () => {
+  const refreshed = await refreshSessionForCustomer(queryClient);
+  if (refreshed === false) handleUnauthenticated();
+  return refreshed === true;
 });
 
 export function Providers({ children }: { children: ReactNode }) {

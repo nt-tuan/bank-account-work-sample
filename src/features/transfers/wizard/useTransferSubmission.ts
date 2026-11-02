@@ -22,6 +22,7 @@ export function useTransferSubmission(onCreated: () => void) {
     try {
       const result = await submitTransferOrder(queryClient, review.command, review.key, {
         signal: ctrl.signal,
+        previousOutcomeUnknown: submission.phase === SubmissionPhase.Unknown,
         onAttempt: (attempt) => {
           setSubmission({ phase: SubmissionPhase.Submitting, attempt });
           announce(

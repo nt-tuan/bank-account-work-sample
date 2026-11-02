@@ -1,4 +1,4 @@
-import type { ErrorCode, FieldErrors } from '@domain/errors.ts';
+import { ErrorCode, type FieldErrors } from '@domain/errors.ts';
 import type { z } from 'zod';
 import { errorEnvelopeSchema } from '@domain/schemas/api.ts';
 
@@ -69,6 +69,22 @@ export function onUnauthenticated(handler: () => void) {
   unauthenticatedHandler = handler;
 }
 
+let csrfInvalidHandler: (() => Promise<boolean>) | null = null;
+let csrfRecovery: Promise<boolean> | undefined;
+/** Refresh credentials once for concurrent rejections; never replay a mutation here. */
+export function onCsrfInvalid(handler: (() => Promise<boolean>) | null) {
+  csrfInvalidHandler = handler;
+}
+
+async function recoverCsrf() {
+  if (!csrfInvalidHandler) return false;
+  return (csrfRecovery ??= csrfInvalidHandler()
+    .catch(() => false)
+    .finally(() => {
+      csrfRecovery = undefined;
+    }));
+}
+
 type RequestOptions<T> = {
   method?: HttpMethod;
   body?: unknown;
@@ -76,7 +92,7 @@ type RequestOptions<T> = {
   headers?: Record<string, string>;
   signal?: AbortSignal;
   timeoutMs?: number;
-  /** Do not trigger the global sign-out on 401 (login form, session discovery). */
+  /** Session actions own their 401/CSRF recovery (login, logout, discovery). */
   skipAuthRedirect?: boolean;
 };
 
@@ -127,6 +143,13 @@ export async function request<T = void>(path: string, opts: RequestOptions<T> = 
     if (fieldErrors) failure.fieldErrors = fieldErrors;
     if (Number.isFinite(retryAfter) && retryAfter > 0) failure.retryAfterSeconds = retryAfter;
     if (response.status === 401 && !opts.skipAuthRedirect) unauthenticatedHandler?.();
+    if (failure.code === ErrorCode.CSRF_INVALID && !opts.skipAuthRedirect) {
+      const refreshed = await recoverCsrf();
+      if (opts.signal?.aborted) throw opts.signal.reason;
+      failure.message = refreshed
+        ? 'Your session was refreshed. Please try again.'
+        : "We couldn't refresh your session. Please try again.";
+    }
     throw new ApiError(failure);
   }
 

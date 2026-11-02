@@ -12,10 +12,14 @@ export function ActivityFilters({
   filters,
   setFilters,
   clearAll,
+  search,
+  changeSearch,
 }: {
   filters: ActivityFilters;
   setFilters: SetActivityFilters;
   clearAll: () => void;
+  search: string;
+  changeSearch: (value: string) => void;
 }) {
   const accounts = useAccounts();
   const thisMonth = currentJstMonth();
@@ -56,10 +60,7 @@ export function ActivityFilters({
       aria-label="Filter activity"
       onSubmit={(e) => e.preventDefault()}
     >
-      <SearchBox
-        value={filters.q ?? ''}
-        onCommit={(q) => setFilters({ q: q || undefined }, { replace: true })}
-      />
+      <SearchBox value={search} onChange={changeSearch} />
       <div className={ui.filterGrid}>
         <div className={ui.field}>
           <label className={ui.label} htmlFor="f-account">

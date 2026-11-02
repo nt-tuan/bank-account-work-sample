@@ -22,6 +22,14 @@ const SERVER_WORDED = new Set([ErrorCode.SOURCE_UNAVAILABLE, ErrorCode.TRANSFER_
 export function mapTransferRejection(failure: RejectedFailure): RejectionAction | null {
   // Authentication failures belong to the global auth handler.
   if (failure.status === 401) return null;
+  if (failure.code === ErrorCode.CSRF_INVALID)
+    return {
+      step: TransferStep.Review,
+      errors: {},
+      message: failure.message,
+      reviewPolicy: ReviewPolicy.Keep,
+      announcement: failure.message,
+    };
   if (failure.status === 400 && failure.fieldErrors) {
     const errors: RejectionAction['errors'] = {};
     let step: TransferStep | undefined;

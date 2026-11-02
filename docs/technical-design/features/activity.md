@@ -64,8 +64,9 @@ Search, date range, other filters, sort and paging therefore never distort the b
 /activity?cat=transfer&transferStatus=processing
 ```
 
-- **Search** (`shared/ui/SearchBox`) keeps local input, trims it and writes `q` after 300 ms with `replace`, and re-syncs when `q` changes through back/forward.
+- **Search**: `useActivityController` owns the input draft and 300 ms debounce; `shared/ui/SearchBox` is controlled. Clear filters cancels the pending timer and clears both the draft and URL. Back/Forward cancels pending search even when the destination has the same applied `q`; other external query changes also restore the input.
 - **Month tabs** show the six months ending with the current one; the current month is the default and is omitted from the URL.
+- **Navigation links**: `activityListHref` applies the same query-model updates as filter controls. Pagination and month links carry all retained filters in their actual destinations, so middle-click, opening a new tab and copying a link preserve context; month changes reset the page.
 - **Custom range** is edited in `RangeForm`'s local state; it is written to the URL only when both dates are present and `to ≥ from`, so an invalid range never issues a query. An applied range always opens its panel; blank draft visibility is tied to the current history entry. The form is keyed by the applied dates, so Back/Forward restores the inputs as well as the query.
 - **Chips** are derived from the parsed filters (which covers Insights drill-down links); each removes its parameter. **Clear filters** resets every filter and closes the range form.
 

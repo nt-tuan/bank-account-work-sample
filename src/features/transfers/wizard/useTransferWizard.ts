@@ -20,7 +20,6 @@ export function useTransferWizard() {
   const clearStepError = () => setStepError(null);
   const goTo = (target: TransferStep) => {
     clearStepError();
-    // Leaving Review unmounts its submission controller, including unknown state.
     setStep(target);
   };
   const openReview = () => {
@@ -36,7 +35,7 @@ export function useTransferWizard() {
     const action = mapTransferRejection(result.failure);
     if (!action) return;
     if (action.reviewPolicy === ReviewPolicy.Invalidate) invalidateReview();
-    else renewReviewKey();
+    else if (action.reviewPolicy === ReviewPolicy.Renew) renewReviewKey();
     for (const [field, message] of Object.entries(action.errors))
       form.setError(field as keyof TransferValues, { message });
     // Apply navigation and server errors together; goTo would clear these errors.

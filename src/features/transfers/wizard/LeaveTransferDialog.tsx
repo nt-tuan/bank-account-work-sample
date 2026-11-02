@@ -5,10 +5,12 @@ export function LeaveTransferDialog({
   blocked,
   leave,
   keepEditing,
+  uncertain,
 }: {
   blocked: boolean;
   leave: () => void;
   keepEditing: () => void;
+  uncertain: boolean;
 }) {
   return (
     <AlertDialog.Root
@@ -27,7 +29,9 @@ export function LeaveTransferDialog({
           </div>
           <div className={ui.dialogBody}>
             <AlertDialog.Description className="text-sm">
-              The details you entered will be discarded. Nothing has been sent.
+              {uncertain
+                ? 'Your transfer may already have been sent. Leaving does not cancel it. Check Account activity before sending again.'
+                : 'The details you entered will be discarded. Nothing has been sent.'}
             </AlertDialog.Description>
             <div className={ui.actionsCenter}>
               <AlertDialog.Action className={ui.btnOutline} onClick={leave}>

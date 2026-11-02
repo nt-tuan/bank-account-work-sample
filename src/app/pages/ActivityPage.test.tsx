@@ -1,6 +1,6 @@
 import { TransferStatus } from '@domain/domain/enums.ts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { act, render, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -52,6 +52,48 @@ afterEach(() => {
 });
 
 describe('Activity functional blocks', () => {
+  it('cancels an uncommitted search when clearing filters', async () => {
+    const { router } = renderActivity('/activity?status=posted');
+    await screen.findByRole('table');
+    vi.useFakeTimers();
+    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'sakura' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Clear filters' }));
+    await act(() => vi.advanceTimersByTimeAsync(1_000));
+    expect(router.state.location.search).toBe('');
+    expect(screen.getByRole('searchbox')).toHaveValue('');
+    expect(vi.mocked(api.activity).mock.calls.every(([params]) => !params.q)).toBe(true);
+  });
+
+  it('cancels pending search on Back and Forward even when the applied query is unchanged', async () => {
+    const { router } = renderActivity('/activity?status=posted');
+    await screen.findByRole('table');
+    await act(() => router.navigate('/activity?status=pending'));
+    vi.useFakeTimers();
+    for (const delta of [-1, 1]) {
+      fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'uncommitted' } });
+      await act(() => router.navigate(delta));
+      await act(() => vi.advanceTimersByTimeAsync(1_000));
+      expect(screen.getByRole('searchbox')).toHaveValue('');
+      expect(router.state.location.search).not.toContain('q=');
+    }
+    expect(router.state.location.search).toBe('?status=pending');
+  });
+
+  it('includes every filter in pagination and month link destinations', async () => {
+    vi.mocked(api.activity).mockResolvedValue({ ...activityList, total: 41 });
+    renderActivity('/activity?account=everyday&month=2026-10&q=coffee&status=posted&page=2');
+    await screen.findByRole('table');
+    expect(screen.getByRole('link', { name: 'Next page' })).toHaveAttribute(
+      'href',
+      '/activity?account=everyday&month=2026-10&q=coffee&status=posted&page=3',
+    );
+    const month = monthsEndingAt(currentJstMonth(), 6)[4]!;
+    expect(screen.getByRole('link', { name: formatMonth(month) })).toHaveAttribute(
+      'href',
+      `/activity?account=everyday&month=${month}&q=coffee&status=posted`,
+    );
+  });
+
   it('loads results while accounts are pending and resolves account chips independently', async () => {
     const accounts = deferred<AccountSummary[]>();
     vi.mocked(api.accounts).mockReturnValueOnce(accounts.promise);

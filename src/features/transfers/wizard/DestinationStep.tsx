@@ -37,10 +37,16 @@ type DestinationValidation = {
 export function validateDestination(
   values: TransferValues,
   lookup: LookupState,
+  accounts: AccountSummary[],
 ): DestinationValidation {
   const errors: DestinationValidation['errors'] = {};
   if (values.kind === TransferDestinationKind.Own) {
-    if (!values.destAccountId) errors.destAccountId = 'Choose an account to send to.';
+    const destination = accounts.find((account) => account.id === values.destAccountId);
+    if (!destination) errors.destAccountId = 'Choose an account to send to.';
+    else if (destination.id === values.sourceAccountId)
+      errors.destAccountId = 'Choose a different account from the source.';
+    else if (!destination.canReceive)
+      errors.destAccountId = "This account can't receive transfers right now.";
     return { errors };
   }
   if (!values.bankId) errors.bankId = 'Choose a bank.';
@@ -98,7 +104,7 @@ export function DestinationStep({
     setLookupError(null);
     clearErrors(['destAccountId', 'bankId', 'accountNumber', 'recipientName']);
     const values = getValues();
-    const result = validateDestination(values, recipient.state);
+    const result = validateDestination(values, recipient.state, accounts);
     const firstError = Object.keys(result.errors)[0];
     for (const [field, message] of Object.entries(result.errors))
       setError(field as keyof TransferValues, { message });

@@ -1,5 +1,6 @@
 import { currentJstMonth, formatMonth, formatShortDateTime } from '@/shared/format/format.ts';
 import { Pagination } from '@/shared/ui/Pagination.tsx';
+import { activityListHref } from './navigation.ts';
 import { ui, twMerge } from '@/shared/ui/classes.ts';
 import {
   ActivityStatusText,
@@ -199,7 +200,7 @@ export function ActivityResults({
             page={filters.page}
             pageSize={list.data.pageSize}
             total={list.data.total}
-            onPage={(page) => setFilters({ page })}
+            getPageHref={(page) => activityListHref(filters, { page })}
           />
         </>
       )}

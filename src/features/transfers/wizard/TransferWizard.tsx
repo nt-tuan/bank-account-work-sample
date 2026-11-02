@@ -3,12 +3,13 @@ import { useRef } from 'react';
 import { AmountStep } from './AmountStep.tsx';
 import { DestinationStep } from './DestinationStep.tsx';
 import { LeaveGuardController } from './LeaveGuardController.tsx';
-import { ReviewController } from './ReviewController.tsx';
+import { ReviewStep } from './ReviewStep.tsx';
 import { SourceStep } from './SourceStep.tsx';
 import { SourceSummary } from './SourceSummary.tsx';
 import { TransferFormRoot } from './TransferFormRoot.tsx';
 import { TransferProgress } from './TransferProgress.tsx';
 import { useTransferWizard } from './useTransferWizard.ts';
+import { useTransferSubmission } from './useTransferSubmission.ts';
 
 export function TransferWizard(input: WizardInput) {
   return (
@@ -38,6 +39,12 @@ function TransferFlow({ accounts, banks, limitMax }: WizardInput) {
     clearStepError,
   } = useTransferWizard();
   const { orderCreated, onCreated } = useOrderTracker();
+  const { submission, confirm } = useTransferSubmission(onCreated);
+  const confirmReview = async () => {
+    if (!review) return;
+    clearStepError();
+    handleSubmissionResult(await confirm(review));
+  };
 
   return (
     <>
@@ -74,18 +81,22 @@ function TransferFlow({ accounts, banks, limitMax }: WizardInput) {
         />
       )}
       {step === TransferStep.Review && (
-        <ReviewController
+        <ReviewStep
           accounts={accounts}
           banks={banks}
           review={review}
           error={stepError}
-          onAttempt={clearStepError}
-          onResult={handleSubmissionResult}
+          source={accounts.find((account) => account.id === review?.command.sourceAccountId)}
+          submission={submission}
+          onConfirm={confirmReview}
           onEdit={goTo}
-          onCreated={onCreated}
         />
       )}
-      <LeaveGuardController hasNavigated={hasNavigated} orderCreated={orderCreated} />
+      <LeaveGuardController
+        hasNavigated={hasNavigated}
+        orderCreated={orderCreated}
+        submission={submission}
+      />
     </>
   );
 }

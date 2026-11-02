@@ -1,5 +1,6 @@
 import { ApiFailureKind, ApiError, type RejectedFailure } from '@/shared/api/http.ts';
 import type { Transfer } from '@domain/schemas/api.ts';
+import { ErrorCode } from '@domain/errors.ts';
 
 /** Bounded submission attempts: initial request and at most two retries. */
 export enum SubmissionAttempt {
@@ -47,6 +48,7 @@ export async function submitTransfer(
     random?: () => number;
     sleep?: Sleep;
     signal: AbortSignal;
+    previousOutcomeUnknown?: boolean;
     onAttempt?: (n: SubmissionAttempt) => void;
   },
 ): Promise<SubmitResult> {
@@ -54,6 +56,7 @@ export async function submitTransfer(
   const jitter = opts.jitter ?? 0.2;
   const random = opts.random ?? Math.random;
   const sleep = opts.sleep ?? realSleep;
+  let uncertain = opts.previousOutcomeUnknown ?? false;
   for (
     let attempt = SubmissionAttempt.Initial as SubmissionAttempt;
     ;
@@ -64,9 +67,14 @@ export async function submitTransfer(
       return { kind: SubmitResultKind.Created, transfer: await send(opts.signal) };
     } catch (error) {
       if (opts.signal.aborted) throw error;
-      if (error instanceof ApiError && error.failure.kind === ApiFailureKind.Rejected)
+      if (error instanceof ApiError && error.failure.kind === ApiFailureKind.Rejected) {
+        // A CSRF check rejects this attempt before replay lookup; an earlier attempt may have committed.
+        if (uncertain && error.failure.code === ErrorCode.CSRF_INVALID)
+          return { kind: SubmitResultKind.Unknown };
         return { kind: SubmitResultKind.Rejected, failure: error.failure };
+      }
       if (!(error instanceof ApiError)) throw error;
+      uncertain = true;
       if (attempt === SubmissionAttempt.FinalRetry) return { kind: SubmitResultKind.Unknown };
       await sleep(withJitter(delays[attempt - 1]!, jitter, random), opts.signal);
     }

@@ -1,1 +1,7 @@
-export { clearCustomerData, loginPath, useLogout, useSession } from './session.ts';
+export {
+  clearCustomerData,
+  loginPath,
+  useLogout,
+  useSession,
+  refreshSessionForCustomer,
+} from './session.ts';
